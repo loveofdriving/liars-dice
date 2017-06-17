@@ -5,6 +5,7 @@ Created on Jun 16, 2017
 '''
 from random import randint, getrandbits
 from time import sleep
+from copy import deepcopy
 from liarsdice.players.HumanPlayer import HumanPlayer
 from liarsdice.players.DumbComputerPlayer import DumbComputerPlayer
 from liarsdice.Bid import Challenge
@@ -47,14 +48,16 @@ def run_round(player_1, player_2, p1_num_dice, p2_num_dice, p1_goes_first):
     while True:
         # Whoever's turn it is, get their bid
         if turn_player_1:
-            bid = player_1.get_bid(p1_hand, len(p2_hand), previous_bid)
+            # Pass in a copy of the bid so that the player can't edit the original
+            bid = player_1.get_bid(p1_hand, len(p2_hand), deepcopy(previous_bid))
             print(player_1, "bids", bid)
             # If the bid is invalid, p1 loses round
             if bid == None or not bid.is_valid(previous_bid):
                 print("Invalid bid. %s loses round." % player_1)
                 return False
         else:
-            bid = player_2.get_bid(p2_hand, len(p1_hand), previous_bid)
+            # Pass in a copy of the bid so that the player can't edit the original
+            bid = player_2.get_bid(p2_hand, len(p1_hand), deepcopy(previous_bid))
             print(player_2, "bids", bid)
             # If the bid is invalid, p2 loses round
             if bid == None or not bid.is_valid(previous_bid):
