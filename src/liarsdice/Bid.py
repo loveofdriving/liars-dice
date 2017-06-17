@@ -12,6 +12,21 @@ class Challenge(object):
         return previous_bid != None
     def __repr__(self):
         return "Liar!"
+    
+    def __eq__(self, other):
+        ''' Always consider two Challenges to be equals ''' 
+        if isinstance(other, self.__class__):
+            return True
+        return NotImplemented
+    
+    def __ne__(self, other):
+        if isinstance(other, self.__class__):
+            return not self.__eq__(other)
+        return NotImplemented
+    
+    def __hash__(self):
+        ''' Since all Challenges are equal, return a constant hash code for all instances '''
+        return 1
 
 class Bid(object):
     '''
@@ -50,3 +65,17 @@ class Bid(object):
 
     def __repr__(self):
         return "%s %s" % (_ENGLISH_NUMBERS.get(self.quantity, self.quantity), str(_ENGLISH_NUMBERS[self.face] if self.quantity == 1 else _ENGLISH_PLURALS[self.face]))
+
+    def __eq__(self, other):
+        ''' Two bids are equal if they have the same quantity and face ''' 
+        if isinstance(other, self.__class__):
+            return self.quantity == other.quantity and self.face == other.face
+        return NotImplemented
+    
+    def __ne__(self, other):
+        if isinstance(other, self.__class__):
+            return not self.__eq__(other)
+        return NotImplemented
+    
+    def __hash__(self):
+        return hash((self.face, self.quantity))
