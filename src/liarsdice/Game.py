@@ -9,6 +9,10 @@ from liarsdice.players.HumanPlayer import HumanPlayer
 from liarsdice.players.DumbComputerPlayer import DumbComputerPlayer
 from liarsdice.Bid import Challenge
 
+NUMBER_OF_GAMES = 2
+PLAYER_1_CLASS = HumanPlayer
+PLAYER_2_CLASS = DumbComputerPlayer
+
 def roll_dice(num_dice):
     ''' Get list of random numbers between 1 and 6, of the size given '''
     dice = []
@@ -91,13 +95,8 @@ def run_round(player_1, player_2, p1_num_dice, p2_num_dice, p1_goes_first):
         # player 1 doing the challenging, return False.
         print("The bid was good. The challenger loses the round!")
         return not turn_player_1
-    
-if __name__ == '__main__':
-    
-    # Instantiate each player
-    player_1 = HumanPlayer("HumanPlayer 1")
-    player_2 = DumbComputerPlayer("ComputerPlayer 2")
-    
+
+def run_game(player_1, player_2):
     # each player starts with 5 dice
     p1_num_dice = 5
     p2_num_dice = 5
@@ -122,5 +121,37 @@ if __name__ == '__main__':
     else:
         if p1_num_dice == 0:
             print("%s wins!" % player_2)
+            return False
         elif p2_num_dice == 0:
             print("%s wins!" % player_1)
+            return True
+
+if __name__ == '__main__':
+    
+    # Instantiate each player
+    player_1 = PLAYER_1_CLASS("Player 1")
+    player_2 = PLAYER_2_CLASS("Player 2")
+    
+    p1_win_count = 0
+    p2_win_count = 0
+    
+    for game_num in range(NUMBER_OF_GAMES):
+    
+        print("Running game number %d" % (game_num + 1))
+        
+        # Run the game
+        p1_is_winner = run_game(player_1, player_2)
+        
+        # Tell each side whether they won or lost
+        player_1.inform_result(p1_is_winner)
+        player_2.inform_result(not p1_is_winner)
+        
+        # Increment the win count
+        if p1_is_winner:
+            p1_win_count += 1
+        else:
+            p2_win_count += 1
+            
+    print("Final win totals:")
+    print("%s: %d" % (player_1, p1_win_count))
+    print("%s: %d" % (player_2, p2_win_count))

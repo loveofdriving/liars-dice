@@ -41,3 +41,9 @@ class HumanPlayer(AbstractPlayer):
             return Bid(int(bid_str[0:2]), int(bid_str[3]))
         else:
             return None
+        
+    def inform_result(self, you_won):
+        if you_won:
+            print("Yay, humans rule!")
+        else:
+            print("Crap, human lost")

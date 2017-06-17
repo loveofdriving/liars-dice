@@ -27,3 +27,10 @@ class AbstractPlayer(object):
         if we're creating an opening bid right now.
         '''
         raise NotImplementedError("Subclasses should implement this")
+
+    def inform_result(self, you_won):
+        '''
+        After a game is over, the player will be informed of whether it
+        won or lost with a boolean.
+        '''
+        pass
