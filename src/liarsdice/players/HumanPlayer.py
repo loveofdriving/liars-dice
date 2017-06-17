@@ -28,19 +28,28 @@ class HumanPlayer(AbstractPlayer):
         
         print("Your hand:", hand)
         print("Opponent has", opp_num_dice, "dice.")
-        print("Opponent's previous bid was", previous_bid)
+        print("Opponent's bid is", previous_bid)
         
-        bid_str = input(str(self) + " bid: ")
-        if not bid_str:
-            return None
-        elif bid_str.upper() == "C":
-            return Challenge()
-        elif len(bid_str) == 3:
-            return Bid(int(bid_str[0]), int(bid_str[2]))
-        elif len(bid_str) == 4:
-            return Bid(int(bid_str[0:2]), int(bid_str[3]))
-        else:
-            return None
+        # Loop until we get a valid bid from the user
+        while True:
+            
+            bid_str = input(str(self) + " bid: ")
+            if not bid_str:
+                bid = None
+            elif bid_str.upper() == "C":
+                bid = Challenge()
+            elif len(bid_str) == 3:
+                bid = Bid(int(bid_str[0]), int(bid_str[2]))
+            elif len(bid_str) == 4:
+                bid = Bid(int(bid_str[0:2]), int(bid_str[3]))
+                
+            # Make sure the bid is valid
+            if not bid or not bid.is_valid(previous_bid):
+                print("Invalid bid. Try again.")
+                continue
+            
+            # Found a valid bid, return it
+            return bid
         
     def inform_result(self, you_won):
         if you_won:
