@@ -4,7 +4,6 @@ Created on Jun 16, 2017
 @author: Paul Stone
 '''
 from random import randint
-from time import sleep
 from liarsdice.Bid import Bid, Challenge
 from liarsdice.players.AbstractPlayer import AbstractPlayer
 
@@ -23,7 +22,7 @@ class DumbComputerPlayer(AbstractPlayer):
     def get_bid(self, hand, opp_num_dice, previous_bid):
         
         print("Computer deciding on move...")
-        sleep(1)
+
         # If we're opening the bidding, just pick a random face and quantity
         if not previous_bid:
             return Bid(randint(1, 6), randint(1, 6))

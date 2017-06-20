@@ -4,7 +4,6 @@ Created on Jun 16, 2017
 @author: Paul Stone
 '''
 from random import randint, getrandbits
-from time import sleep
 from copy import deepcopy
 from liarsdice.players.HumanPlayer import HumanPlayer
 from liarsdice.players.DumbComputerPlayer import DumbComputerPlayer
@@ -28,15 +27,14 @@ def run_round(player_1, player_2, p1_num_dice, p2_num_dice, p1_goes_first):
     Return True if player 1 wins the round.  Return False if player 2 winds the round.
     '''
     print("Rolling dice...")
-    sleep(1)
     
     # Get player 1's roll
     p1_hand = roll_dice(p1_num_dice)
-    print(p1_hand)
+    # print(p1_hand)
     
     # Get player 2's roll
     p2_hand = roll_dice(p2_num_dice)
-    print(p2_hand)
+    # print(p2_hand)
     
     # No bid yet
     previous_bid = None
@@ -92,11 +90,15 @@ def run_round(player_1, player_2, p1_num_dice, p2_num_dice, p1_goes_first):
         # doing the challenging, return True. If it was player 2 doing
         # the challenging, return False
         print("The bid was too high. The challenger wins the round!")
+        player_1.inform_round_result(turn_player_1, p1_hand, p2_hand)
+        player_2.inform_round_result(not turn_player_1, p2_hand, p1_hand)
         return turn_player_1
     else:
         # The bid was a good one, so the challenger loses. If it was 
         # player 1 doing the challenging, return False.
         print("The bid was good. The challenger loses the round!")
+        player_1.inform_round_result(not turn_player_1, p1_hand, p2_hand)
+        player_2.inform_round_result(turn_player_1, p2_hand, p1_hand)
         return not turn_player_1
 
 def run_game(player_1, player_2):
@@ -138,16 +140,24 @@ if __name__ == '__main__':
     p1_win_count = 0
     p2_win_count = 0
     
+    # Inform the players that a new opponent is starting
+    player_1.starting_new_opponent()
+    player_2.starting_new_opponent()
+    
     for game_num in range(NUMBER_OF_GAMES):
     
         print("Running game number %d" % (game_num + 1))
+        
+        # Inform the players that a new game is starting
+        player_1.starting_new_game()
+        player_2.starting_new_game()
         
         # Run the game
         p1_is_winner = run_game(player_1, player_2)
         
         # Tell each side whether they won or lost
-        player_1.inform_result(p1_is_winner)
-        player_2.inform_result(not p1_is_winner)
+        player_1.inform_game_result(p1_is_winner)
+        player_2.inform_game_result(not p1_is_winner)
         
         # Increment the win count
         if p1_is_winner:

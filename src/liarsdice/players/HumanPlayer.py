@@ -51,7 +51,14 @@ class HumanPlayer(AbstractPlayer):
             # Found a valid bid, return it
             return bid
         
-    def inform_result(self, you_won):
+    def inform_round_result(self, you_won, your_hand, opp_hand):
+        print("I see the round ended.")
+        if you_won:
+            print("I won with %s against %s" % (your_hand, opp_hand))
+        else:
+            print("I lost with %s against %s" % (your_hand, opp_hand))
+
+    def inform_game_result(self, you_won):
         if you_won:
             print("Yay, humans rule!")
         else:
